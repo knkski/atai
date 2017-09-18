@@ -5,6 +5,7 @@ Adapted from the MNIST Keras example here:
 https://github.com/fchollet/keras/blob/master/examples/mnist_cnn.py
 """
 
+from datetime import datetime
 from keras import backend as K
 from keras.callbacks import TensorBoard
 from keras.datasets import mnist
@@ -18,7 +19,7 @@ import sys
 
 batch_size = 128
 num_classes = 10
-epochs = 20
+epochs = 40
 
 # input image dimensions
 img_rows, img_cols = 28, 28
@@ -59,14 +60,17 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 
 # Build training model
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
+model.add(Conv2D(64, kernel_size=(7, 7),
                  activation='relu',
                  input_shape=input_shape))
-model.add(Conv2D(32, (3, 3), activation='relu'))
+model.add(Conv2D(64, (7, 7), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(256, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 
@@ -74,8 +78,11 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
+print("Model Summary:")
+print(model.summary())
+
 # Declare tensorboard callback
-tensorboard = TensorBoard(log_dir='./logs',
+tensorboard = TensorBoard(log_dir='./logs/%s' % datetime.now().strftime('%Y-%m-%d_%H:%M'),
                           histogram_freq=0,
                           write_graph=True,
                           write_images=False)

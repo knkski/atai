@@ -2,6 +2,7 @@ notMNIST_*.tar.gz
 notMNIST_*/
 *.npz
 *.h5
+logs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
