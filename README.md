@@ -47,3 +47,12 @@ notMNIST data sets, pass in the path to the preprocessed data file.
 
 This will show how well the model did against the data set, and then save it as
 `model.h5`. To then get predictions from the model later, use `predict.py`
+
+
+Background Reading
+------------------
+
+These papers have been recommended for background on deep learning:
+
+https://www.cs.toronto.edu/~hinton/absps/NatureDeepReview.pdf
+https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf

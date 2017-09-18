@@ -65,7 +65,7 @@ model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(96, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 
@@ -74,11 +74,14 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               metrics=['accuracy'])
 
 # Train model on training set
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
+try:
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=1,
+              validation_data=(x_test, y_test))
+except KeyboardInterrupt:
+    print("\n\nCaught KeyboardInterrupt, stopping training!")
 
 # See how well it did on the test set
 test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
