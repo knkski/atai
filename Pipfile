@@ -1,0 +1,10 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[packages]
+tensorflow = "*"
+scikit-learn = "*"
+Keras = "*"
+Pillow = "*"
+h5py = "*"
