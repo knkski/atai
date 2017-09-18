@@ -5,15 +5,16 @@ Adapted from the MNIST Keras example here:
 https://github.com/fchollet/keras/blob/master/examples/mnist_cnn.py
 """
 
-import sys
-import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
-import numpy as np
+from keras.callbacks import TensorBoard
+from keras.datasets import mnist
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten
+from keras.models import Sequential
 from sklearn.model_selection import train_test_split
+import keras
+import numpy as np
+import sys
 
 batch_size = 128
 num_classes = 10
@@ -73,13 +74,20 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
+# Declare tensorboard callback
+tensorboard = TensorBoard(log_dir='./logs',
+                          histogram_freq=0,
+                          write_graph=True,
+                          write_images=False)
+
 # Train model on training set
 try:
     model.fit(x_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
               verbose=1,
-              validation_data=(x_test, y_test))
+              validation_data=(x_test, y_test),
+              callbacks=[tensorboard])
 except KeyboardInterrupt:
     print("\n\nCaught KeyboardInterrupt, stopping training!")
 
