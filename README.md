@@ -54,5 +54,8 @@ Background Reading
 
 These papers have been recommended for background on deep learning:
 
+https://arxiv.org/pdf/1611.00847.pdf
+
 https://www.cs.toronto.edu/~hinton/absps/NatureDeepReview.pdf
+
 https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf
