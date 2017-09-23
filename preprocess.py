@@ -15,7 +15,7 @@ for size in ['small', 'large']:
 
         letter_data = np.zeros((len(images), 28, 28))
 
-        # Load the image data into the nump array. Some images are broken
+        # Load the image data into the numpy array. Some images are broken
         # (0 bytes), and we just skip them.
         for j, image in enumerate(images):
             try:

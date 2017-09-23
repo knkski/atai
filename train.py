@@ -43,8 +43,8 @@ else:
 x_train /= 255
 x_test /= 255
 
-# Resize from (m, 28, 28) to (m, 28, 28, 1)
-# TODO: Why is this necessary?
+# Resize from (m, 28, 28) to (m, 28, 28, 1), since Keras always assumes the 4th
+# dimension in case of RGB images, even if we're just doing B/W images.
 x_train = x_train.reshape(x_train.shape[0], *input_shape)
 x_test = x_test.reshape(x_test.shape[0], *input_shape)
 
@@ -58,25 +58,39 @@ print("Found %s records. Splitting into %s training and %s test records." % (
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
-# Build training model
-model = Sequential()
+# Uncomment this for a basic model that trains quickly on a laptop
+# model = Sequential([
+#     Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
+#     MaxPooling2D(pool_size=(2, 2)),
+#     Dropout(0.25),
+#
+#     Flatten(),
+#     Dense(64, activation='relu'),
+#     Dense(64, activation='relu'),
+#     Dense(num_classes, activation='softmax'),
+# ])
 
-# First layer of convolutional networks
-model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
-model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+# This model achieves better accuracy, but takes much longer to train. Should
+# not be run without access to a beefy GPU
+model = Sequential([
+    # First layer of convolutional networks
+    Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
+    Conv2D(64, kernel_size=(3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Dropout(0.25),
 
-# Let's try another layer
-model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
-model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+    # Let's try another layer
+    Conv2D(128, kernel_size=(3, 3), activation='relu'),
+    Conv2D(128, kernel_size=(3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Dropout(0.25),
 
-model.add(Flatten())
-model.add(Dense(4096, activation='relu'))
-model.add(Dense(4096, activation='relu'))
-model.add(Dense(num_classes, activation='softmax'))
+    Flatten(),
+    Dense(4096, activation='relu'),
+    Dense(4096, activation='relu'),
+    Dense(num_classes, activation='softmax'),
+])
+
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
