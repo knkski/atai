@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ba6791ec87f86b962fc8d7cf443cccd42e351e9d0dd431dcde4824f2f841ad47"
+            "sha256": "c63353497bc2fe43d118c55f0d02d15bdec745e2d19ae8775e23d632b8a8e466"
         },
         "requires": {},
         "sources": [
@@ -20,6 +20,10 @@
             "hash": "sha256:73af797238b95768b3a9b6fe6270e250e5c09d988b8e5b223fd5efa4e06faf81",
             "version": "==2.6.9"
         },
+        "Pillow": {
+            "hash": "sha256:4757ad2eee627dca861289291512e66292ce535c2bc79210321c440381cf0901",
+            "version": "==4.2.1"
+        },
         "PyYAML": {
             "hash": "sha256:592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab",
             "version": "==3.12"
@@ -32,24 +36,32 @@
             "hash": "sha256:e67f46adcec78dbc3c04462f3aba3213a673d5652eba2609ed1ef15492a44b8d",
             "version": "==1.5.0"
         },
+        "h5py": {
+            "hash": "sha256:07ddea6bb649a257fc57ccae359a36d691b2ef8b9617971ae7d6f74ef6f67cad",
+            "version": "==2.7.1"
+        },
         "html5lib": {
             "hash": "sha256:2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868",
             "version": "==0.9999999"
         },
         "numpy": {
-            "hash": "sha256:d910a24f536f926bd56fb30d6f17ae8b89a1406e105087a49e014e000b00e8db",
+            "hash": "sha256:9a8515002f143a5934f25ad2aacdfd1fcf57a7f5da6142c439eb8787ef65e8a6",
             "version": "==1.13.1"
         },
+        "olefile": {
+            "hash": "sha256:61f2ca0cd0aa77279eb943c07f607438edf374096b66332fae1ee64a6f0f73ad",
+            "version": "==0.44"
+        },
         "protobuf": {
-            "hash": "sha256:41c4555d9754b985352ce5289fa3ba6b21ed715f595111e46e2b90ca53112475",
+            "hash": "sha256:5b816951df388f4ab2adbd3f9ae5619b9a5d7033d14b005c345dc3ee88a7faf4",
             "version": "==3.4.0"
         },
         "scikit-learn": {
-            "hash": "sha256:4c164b97092c14db5615ec8aeef599e2083ac7ea7f9b7307cda8af058740f957",
+            "hash": "sha256:74c36047878abcf8d9a7d360ad0ac663f1204df0e6d7c70c2f7c8d79af879e02",
             "version": "==0.19.0"
         },
         "scipy": {
-            "hash": "sha256:4de84e3870228e8afd55a6e63e762aa7c9d1e3bd9a9ef5ab716835a69c77d257",
+            "hash": "sha256:4c26ef44e8bb2cd2aef11c60d163caa04670d6f42996789b209526677310ded2",
             "version": "==0.19.1"
         },
         "setuptools": {
@@ -61,7 +73,7 @@
             "version": "==1.11.0"
         },
         "tensorflow": {
-            "hash": "sha256:a535a4a32aaaf5c59dc582ed472f321a86bf1786d17931c017c0ec7c8f1a1c02",
+            "hash": "sha256:e9c43187c69970f7f1f12ff220185bb0ea83f674de1117989ef372112870b78e",
             "version": "==1.3.0"
         },
         "tensorflow-tensorboard": {
