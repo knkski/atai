@@ -21,6 +21,7 @@ users should substitute `%userprofile%/data`.
 To start, ensure that you have Docker installed:
 
 https://www.docker.com/docker-mac
+
 https://www.docker.com/docker-windows
 
 You will need to restart your computer after installing Docker. Then, install
