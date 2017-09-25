@@ -9,17 +9,22 @@ from datetime import datetime
 from keras import backend as K
 from keras.callbacks import TensorBoard
 from keras.datasets import mnist
+from keras.layers.advanced_activations import LeakyReLU
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Flatten
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
+from tensorflow.python.client import device_lib
 import keras
 import numpy as np
 import sys
 
-batch_size = 128
+GPU_ENABLED = any(d for d in device_lib.list_local_devices() if 'gpu' in d.name)
+
+batch_size = 256
 num_classes = 10
-epochs = 10
+epochs = 40 if GPU_ENABLED else 10
+
 
 # input image dimensions
 img_rows, img_cols = 28, 28
@@ -58,39 +63,45 @@ print("Found %s records. Splitting into %s training and %s test records." % (
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
-# Uncomment this for a basic model that trains quickly on a laptop
-# model = Sequential([
-#     Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
-#     MaxPooling2D(pool_size=(2, 2)),
-#     Dropout(0.25),
-#
-#     Flatten(),
-#     Dense(64, activation='relu'),
-#     Dense(64, activation='relu'),
-#     Dense(num_classes, activation='softmax'),
-# ])
+if GPU_ENABLED:
+    # This model achieves better accuracy, but takes much longer to train. Should
+    # not be run without access to a beefy GPU
+    model = Sequential([
+        # First layer of convolutional networks
+        Conv2D(64, kernel_size=(3, 3), activation='linear', input_shape=input_shape),
+        LeakyReLU(alpha=.001),
+        Conv2D(64, kernel_size=(3, 3), activation='linear'),
+        LeakyReLU(alpha=.001),
+        MaxPooling2D(pool_size=(2, 2)),
+        Dropout(0.5),
 
-# This model achieves better accuracy, but takes much longer to train. Should
-# not be run without access to a beefy GPU
-model = Sequential([
-    # First layer of convolutional networks
-    Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
-    Conv2D(64, kernel_size=(3, 3), activation='relu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Dropout(0.25),
+        # Let's try another layer
+        Conv2D(128, kernel_size=(3, 3), activation='linear'),
+        LeakyReLU(alpha=.001),
+        Conv2D(128, kernel_size=(3, 3), activation='linear'),
+        LeakyReLU(alpha=.001),
+        MaxPooling2D(pool_size=(2, 2)),
+        Dropout(0.5),
 
-    # Let's try another layer
-    Conv2D(128, kernel_size=(3, 3), activation='relu'),
-    Conv2D(128, kernel_size=(3, 3), activation='relu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Dropout(0.25),
-
-    Flatten(),
-    Dense(4096, activation='relu'),
-    Dense(4096, activation='relu'),
-    Dense(num_classes, activation='softmax'),
-])
-
+        Flatten(),
+        Dense(4096, activation='linear'),
+        LeakyReLU(alpha=.001),
+        Dense(4096, activation='linear'),
+        LeakyReLU(alpha=.001),
+        Dropout(0.5),
+        Dense(num_classes, activation='softmax'),
+    ])
+else:
+    # This is a simpler model that can easily be trained on a laptop
+    model = Sequential([
+        Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
+        MaxPooling2D(pool_size=(2, 2)),
+        Dropout(0.25),
+        Flatten(),
+        Dense(64, activation='relu'),
+        Dense(64, activation='relu'),
+        Dense(num_classes, activation='softmax'),
+    ])
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
