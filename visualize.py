@@ -6,17 +6,21 @@ import numpy as np
 import sys
 
 
-def main():
-    model = keras.models.load_model('model.h5')
-    image = imread(sys.argv[1]).reshape(1, 28, 28, 1)
+def visualize(model, image):
+    image = imread(image).reshape(1, 28, 28, 1)
 
     activation_maps = [
         (layer.name, K.function([model.input, K.learning_phase()], [layer.output])([image, 0.])[0])
         for layer in model.layers
     ]
 
+    print("The original input image:")
+    plt.imshow(image.reshape(28, 28), interpolation='None', cmap='binary_r')
+    plt.axis('off')
+    plt.show()
+
     for layer_name, activation_map in activation_maps:
-        print('Activation map for layer %s %s' % (layer_name, activation_map.shape))
+        print('Activation map for layer %s %s:' % (layer_name, activation_map.shape))
 
         if len(activation_map.shape) == 4:
             # Convert from vertically-stacked images to side-by-side in a line
@@ -37,7 +41,7 @@ def main():
                 activations = np.expand_dims(activations, axis=0)
 
         else:
-            raise Exception('Can\'t deal with shape %s' % (activation.shape,))
+            raise Exception('Can\'t deal with shape %s' % (activation_map.shape,))
 
         plt.imshow(activations, interpolation='None', cmap='binary_r')
         plt.axis('off')
@@ -45,4 +49,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    model = keras.models.load_model('model.h5')
+    visualize(model, sys.argv[1])
