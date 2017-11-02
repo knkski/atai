@@ -15,15 +15,15 @@ from datetime import datetime
 import keras
 import numpy as np
 from keras.callbacks import TensorBoard
-from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D
+from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D, LeakyReLU, MaxPooling2D, BatchNormalization, ELU
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 
 
 def main(input_file):
-    batch_size = 256
+    batch_size = 2048
     num_classes = 10
-    epochs = 40
+    epochs = 50
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -58,36 +58,21 @@ def main(input_file):
     # but takes much longer to train. Should not be run without access
     # to a beefy GPU
     model = Sequential([
-        # First layer of convolutional networks
         ZeroPadding2D((2, 2), input_shape=input_shape),
-        Conv2D(64, kernel_size=(3, 3), activation='relu'),
-        Conv2D(64, kernel_size=(3, 3), activation='relu'),
-        Dropout(0.5),
-
-        Conv2D(128, kernel_size=(3, 3), activation='relu'),
-        Conv2D(128, kernel_size=(3, 3), activation='relu'),
-        Dropout(0.5),
-
-        Conv2D(256, kernel_size=(3, 3), activation='relu'),
-        Conv2D(256, kernel_size=(3, 3), activation='relu'),
-        Conv2D(256, kernel_size=(3, 3), activation='relu'),
-        Dropout(0.5),
-
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
-        Dropout(0.5),
-
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
-        Conv2D(512, kernel_size=(3, 3), activation='relu'),
+        Conv2D(64, kernel_size=(3, 3), activation='linear'),
+        ELU(),
+        BatchNormalization(),
+        Conv2D(64, kernel_size=(3, 3), activation='linear'),
+        ELU(),
+        BatchNormalization(),
+        MaxPooling2D(pool_size=(2, 2)),
         Dropout(0.5),
 
         Flatten(),
         Dense(4096, activation='relu'),
-        Dropout(0.5),
         Dense(4096, activation='relu'),
-        Dropout(0.5),
+        Dense(4096, activation='relu'),
+        Dense(4096, activation='relu'),
         Dense(num_classes, activation='softmax'),
     ])
 
@@ -99,7 +84,7 @@ def main(input_file):
     print(model.summary())
 
     # Declare tensorboard callback
-    tensorboard = TensorBoard(log_dir='/output/%s' % datetime.now().strftime('%Y-%m-%d_%H-%M'),
+    tensorboard = TensorBoard(log_dir='logs/%s' % datetime.now().strftime('%Y-%m-%d_%H-%M'),
                               histogram_freq=0,
                               write_graph=True,
                               write_images=False)
