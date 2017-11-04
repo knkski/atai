@@ -15,7 +15,11 @@ from datetime import datetime
 import keras
 import numpy as np
 from keras.callbacks import TensorBoard
+<<<<<<< HEAD
 from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D, LeakyReLU, MaxPooling2D, BatchNormalization, ELU
+=======
+from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D, LeakyReLU, MaxPooling2D
+>>>>>>> 8b0148c... Adding blacklist, 98% accuracy + 0.08 loss
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 
@@ -59,20 +63,23 @@ def main(input_file):
     # to a beefy GPU
     model = Sequential([
         ZeroPadding2D((2, 2), input_shape=input_shape),
-        Conv2D(64, kernel_size=(3, 3), activation='linear'),
-        ELU(),
-        BatchNormalization(),
-        Conv2D(64, kernel_size=(3, 3), activation='linear'),
-        ELU(),
-        BatchNormalization(),
+
+        # First layer of convolutional networks
+        Conv2D(64, kernel_size=(3, 3), activation='linear'), LeakyReLU(0.001),
+        Conv2D(64, kernel_size=(3, 3), activation='linear'), LeakyReLU(0.001),
+        MaxPooling2D(pool_size=(2, 2)),
+        Dropout(0.5),
+
+        # Let's try another layer
+        Conv2D(128, kernel_size=(3, 3), activation='linear'), LeakyReLU(0.001),
+        Conv2D(128, kernel_size=(3, 3), activation='linear'), LeakyReLU(0.001),
         MaxPooling2D(pool_size=(2, 2)),
         Dropout(0.5),
 
         Flatten(),
-        Dense(4096, activation='relu'),
-        Dense(4096, activation='relu'),
-        Dense(4096, activation='relu'),
-        Dense(4096, activation='relu'),
+        Dense(4096, activation='linear'), LeakyReLU(0.001),
+        Dense(4096, activation='linear'), LeakyReLU(0.001),
+        Dropout(0.5),
         Dense(num_classes, activation='softmax'),
     ])
 
@@ -84,10 +91,12 @@ def main(input_file):
     print(model.summary())
 
     # Declare tensorboard callback
-    tensorboard = TensorBoard(log_dir='logs/%s' % datetime.now().strftime('%Y-%m-%d_%H-%M'),
-                              histogram_freq=0,
-                              write_graph=True,
-                              write_images=False)
+    tensorboard = TensorBoard(
+        log_dir='/output/%s' % datetime.now().strftime('%Y-%m-%d_%H-%M'),
+        histogram_freq=0,
+        write_graph=True,
+        write_images=False,
+    )
 
     # Train model on training set
     try:
