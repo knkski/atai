@@ -15,11 +15,7 @@ from datetime import datetime
 import keras
 import numpy as np
 from keras.callbacks import TensorBoard
-<<<<<<< HEAD
 from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D, LeakyReLU, MaxPooling2D, BatchNormalization, ELU
-=======
-from keras.layers import Conv2D, Dense, Dropout, Flatten, ZeroPadding2D, LeakyReLU, MaxPooling2D
->>>>>>> 8b0148c... Adding blacklist, 98% accuracy + 0.08 loss
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 
