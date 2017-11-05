@@ -9,6 +9,7 @@ For a smaller model that trains better on a CPU, see [train.ipynb]
 """
 
 import argparse
+import os
 import sys
 from datetime import datetime
 
@@ -20,7 +21,7 @@ from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 
 
-def main(input_file):
+def main(input_file, log_dir):
     batch_size = 2048
     num_classes = 10
     epochs = 50
@@ -88,7 +89,7 @@ def main(input_file):
 
     # Declare tensorboard callback
     tensorboard = TensorBoard(
-        log_dir='/output/%s' % datetime.now().strftime('%Y-%m-%d_%H-%M'),
+        log_dir=os.path.join(log_dir, datetime.now().strftime('%Y-%m-%d_%H-%M')),
         histogram_freq=0,
         write_graph=True,
         write_images=False,
@@ -118,7 +119,8 @@ def main(input_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train model on notMNIST dataset.')
     parser.add_argument('input_file', type=str, help='Input file to train on')
+    parser.add_argument('-l', '--log-dir', type=str, default='logs', help='Where to write tensorboard logs to')
 
     args = parser.parse_args()
 
-    main(args.input_file)
+    main(args.input_file, args.log_dir)
