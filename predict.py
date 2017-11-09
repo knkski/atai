@@ -3,14 +3,31 @@ import sys
 import keras
 from scipy.ndimage import imread
 
-# Load model
-model = keras.models.load_model('model.h5')
 
-# Convert image file to input readable by the model
-image = imread(sys.argv[1]).reshape(1, 28, 28, 1)
+def predict(filenames):
+    # Load model
+    model = keras.models.load_model('model.h5')
 
-# Run the model against the input, and convert from one-hot binary output into
-# a human-friendly character prediction
-prediction = chr(ord('A') + np.argmax(model.predict(image)))
+    if len(filenames) < 1:
+        raise ValueError('No filenames passed in!')
 
-print('The predicted letter for this input is %s' % prediction)
+    images = np.zeros((len(filenames), 28, 28, 1))
+
+    for i, image in enumerate(images):
+        images[i, :] = imread(sys.argv[1]).reshape(1, 28, 28, 1)
+
+    # Run the model against the inputs, and convert from one-hot binary output into
+    # a human-friendly character prediction
+    predictions = [
+        chr(ord('A') + prediction)
+        for prediction in np.argmax(model.predict(images), axis=1)
+    ]
+
+    print('The predicted letters for these images:')
+
+    for filename, prediction in zip(filenames, predictions):
+        print(f"{filename}: {prediction}")
+
+
+if __name__ == '__main__':
+    predict(sys.argv[1:])
