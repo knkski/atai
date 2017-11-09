@@ -4,6 +4,7 @@ notMNIST_*/
 *.h5
 logs/
 .idea/
+errors/
 
 .floydexpt
 
