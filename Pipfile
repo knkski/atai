@@ -15,6 +15,7 @@ graphviz = "*"
 pydot = "*"
 matplotlib = "*"
 floyd-cli = "*"
+pandas = "*"
 
 
 [dev-packages]

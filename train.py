@@ -26,6 +26,8 @@ def main(input_file, log_dir):
     num_classes = 10
     epochs = 50
 
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M')
+
     # input image dimensions
     img_rows, img_cols = 28, 28
     input_shape = (img_rows, img_cols, 1)
@@ -89,7 +91,7 @@ def main(input_file, log_dir):
 
     # Declare tensorboard callback
     tensorboard = TensorBoard(
-        log_dir=os.path.join(log_dir, datetime.now().strftime('%Y-%m-%d_%H-%M')),
+        log_dir=os.path.join(log_dir, now),
         histogram_freq=0,
         write_graph=True,
         write_images=False,
@@ -113,7 +115,7 @@ def main(input_file, log_dir):
     print('Test accuracy:', test_accuracy)
 
     # Save model for later usage
-    model.save('model.h5')
+    model.save('models/model.h5')
 
 
 if __name__ == '__main__':

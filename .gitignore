@@ -5,6 +5,7 @@ notMNIST_*/
 logs/
 .idea/
 errors/
+.DS_Store
 
 .floydexpt
 
