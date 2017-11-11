@@ -1,4 +1,5 @@
 """Calculates statistics for a given model and dataset."""
+import argparse
 
 import numpy as np
 import pandas as pd
@@ -14,9 +15,9 @@ def A(i):
     return chr(ord('A') + int(i))
 
 
-def main(input_file):
+def main(input_file, model_file):
     # Load model
-    model = keras.models.load_model('model.h5')
+    model = keras.models.load_model(model_file)
 
     with np.load(input_file) as f:
         data = f['data'] / 255
@@ -57,16 +58,21 @@ def main(input_file):
     os.mkdir('errors')
 
     for i in range(10):
-        os.mkdir(f"errors/{A(i)}")
+        os.mkdir("errors/%s" % A(i))
 
     for i, row in enumerate(data[errors]):
         char = A(labels[errors][i])
         original_filename = filenames[errors][i]
         predicted_char = A(predictions[errors][i])
-        imsave(f"errors/{char}/{predicted_char}-{original_filename}", row.reshape(28, 28))
+        imsave("errors/%s/%s-%s" % (char, predicted_char, original_filename), row.reshape(28, 28))
 
     print('Done saving images.')
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    parser = argparse.ArgumentParser(description='Train model on notMNIST dataset.')
+    parser.add_argument('input_file', type=str, help='Input file to train on')
+    parser.add_argument('-m', '--model', type=str, default='model.h5', help='The model to load')
+
+    args = parser.parse_args()
+    main(args.input_file, args.model)
