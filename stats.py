@@ -7,6 +7,7 @@ import keras
 from scipy.misc import imsave
 import shutil
 import os
+from sklearn.metrics import confusion_matrix
 
 
 def A(i):
@@ -20,11 +21,9 @@ def main(input_file):
     with np.load(input_file) as f:
         data = f['data'] / 255
         labels = f['labels']
+        filenames = f['filenames']
 
     data = data.reshape(data.shape[0], 28, 28, 1)
-
-    data = data[:100, :, :, :]
-    labels = labels[:100]
 
     predictions = np.argmax(model.predict(data), axis=1)
 
@@ -49,6 +48,9 @@ def main(input_file):
     print("Statistics:")
     print(df)
 
+    print("Confusion matrix:")
+    print(confusion_matrix(labels, predictions, labels=[chr(ord('A') + i) for i in range(10)]))
+
     print("Saving wrongly-predicted images.")
 
     shutil.rmtree('errors', ignore_errors=True)
@@ -58,9 +60,10 @@ def main(input_file):
         os.mkdir(f"errors/{A(i)}")
 
     for i, row in enumerate(data[errors]):
-        char = A(labels[i])
-        predicted_char = A(predictions[i])
-        imsave(f"errors/{char}/{i}-{predicted_char}.png", row.reshape(28, 28))
+        char = A(labels[errors][i])
+        original_filename = filenames[errors][i]
+        predicted_char = A(predictions[errors][i])
+        imsave(f"errors/{char}/{predicted_char}-{original_filename}", row.reshape(28, 28))
 
     print('Done saving images.')
 

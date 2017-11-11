@@ -14,6 +14,7 @@ for size in ['small', 'large']:
 
     data = np.zeros((0, 28, 28))
     labels = np.zeros((0,))
+    filenames = np.array([], dtype=str)
 
     for d in sorted(dirs):
         print(f'Converting directory {d}')
@@ -45,6 +46,8 @@ for size in ['small', 'large']:
 
         data = np.append(data, letter_data, axis=0)
 
+        filenames = np.append(filenames, [i.split('/')[-1] for i in images])
+
     print('Found %s records for notMNIST_%s dataset. Saving...' % (data.shape[0], size))
 
-    np.savez('notmnist_%s.npz' % size, data=data, labels=labels)
+    np.savez('notmnist_%s.npz' % size, data=data, labels=labels, filenames=filenames)

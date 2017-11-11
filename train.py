@@ -7,7 +7,7 @@ https://github.com/fchollet/keras/blob/master/examples/mnist_cnn.py
 NOTE: This model requires a GPU to the model in a reasonable amount of time.
 For a smaller model that trains better on a CPU, see [train.ipynb]
 """
-
+from __future__ import division
 import argparse
 import os
 import sys
