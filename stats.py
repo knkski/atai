@@ -1,9 +1,9 @@
 """Calculates statistics for a given model and dataset."""
+from __future__ import division
 import argparse
 
 import numpy as np
 import pandas as pd
-import sys
 import keras
 from scipy.misc import imsave
 import shutil

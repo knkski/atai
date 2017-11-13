@@ -5,6 +5,8 @@ notMNIST_*/
 logs/
 .idea/
 errors/
+errors.zip
+blacklisted/
 .DS_Store
 
 .floydexpt

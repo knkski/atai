@@ -48,7 +48,10 @@ class BlacklistGUI:
         filename = self.filenames[self.filename_index]
 
         for i, panel in enumerate(self.image_panels):
-            image = ImageTk.PhotoImage(Image.open(f'notMNIST_large/{chr(65+i)}/{filename}'))
+            try:
+                image = ImageTk.PhotoImage(Image.open(f'notMNIST_large/{chr(65+i)}/{filename}'))
+            except FileNotFoundError:
+                image = None
             panel.configure(image=image)
             panel.image = image
 
@@ -56,7 +59,7 @@ class BlacklistGUI:
         self.status_text.set(f'{self.filename_index + 1} / {len(self.filenames)}')
 
     def advance(self):
-        if self.filename_index < len(self.filenames):
+        if self.filename_index < len(self.filenames) - 1:
             self.filename_index += 1
 
     def accept(self, event=None):
