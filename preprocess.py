@@ -17,7 +17,7 @@ for size in ['small', 'large']:
     filenames = np.array([], dtype=str)
 
     for d in sorted(dirs):
-        print(f'Converting directory {d}')
+        print('Converting directory %s' % d)
 
         # Get list of images, filtering out blacklisted ones. The image filename
         # will look like `notMNIST_large/A/foo.png`, and the blacklist will just
