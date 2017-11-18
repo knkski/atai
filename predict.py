@@ -14,7 +14,7 @@ def predict(filenames):
     images = np.zeros((len(filenames), 28, 28, 1))
 
     for i, image in enumerate(images):
-        images[i, :] = imread(sys.argv[1]).reshape(1, 28, 28, 1)
+        images[i, :] = imread(image).reshape(1, 28, 28, 1)
 
     # Run the model against the inputs, and convert from one-hot binary output into
     # a human-friendly character prediction
