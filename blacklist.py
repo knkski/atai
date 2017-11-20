@@ -14,7 +14,7 @@ class BlacklistGUI:
         self.accept_button = Button(master, text='Accept', command=self.accept) \
             .grid(row=2, column=2, columnspan=3, sticky='E')
 
-        self.close_button = Button(master, text='Quit', command=master.quit) \
+        self.close_button = Button(master, text='Quit', command=self.quit) \
             .grid(row=3, columnspan=5)
 
         self.image_panels = [
