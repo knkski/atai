@@ -115,7 +115,7 @@ def main(input_file, log_dir):
     print('Test accuracy:', test_accuracy)
 
     # Save model for later usage
-    model.save('models/model.h5')
+    model.save(os.path.join('models', '%s.h5' % now))
 
 
 if __name__ == '__main__':
