@@ -87,7 +87,7 @@ def predict(model_filename, filenames):
 # For use in final submission
 def classify(image):
     image = image.reshape((1, 28, 28, 1))
-    return predict_tf('models/model.pb', image)
+    return predict_tf('model.pb', image)
 
 
 if __name__ == '__main__':
