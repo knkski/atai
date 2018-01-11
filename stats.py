@@ -1,14 +1,21 @@
-"""Calculates statistics for a given model and dataset."""
+"""Calculates statistics for a given model and dataset.
+
+Example usage:
+
+    python stats.py notmnist_large.npz
+
+"""
 from __future__ import division
 import argparse
+import sys
 
 import numpy as np
 import pandas as pd
-import keras
 from scipy.misc import imsave
 import shutil
 import os
-from sklearn.metrics import confusion_matrix
+
+from predict import predict_keras, predict_tf
 
 
 def A(i):
@@ -16,9 +23,6 @@ def A(i):
 
 
 def main(input_file, model_file):
-    # Load model
-    model = keras.models.load_model(model_file)
-
     with np.load(input_file) as f:
         data = f['data'] / 255
         labels = f['labels']
@@ -26,12 +30,18 @@ def main(input_file, model_file):
 
     data = data.reshape(data.shape[0], 28, 28, 1)
 
-    predictions = np.argmax(model.predict(data), axis=1)
+    if model_file.endswith('.h5'):
+        predictions = predict_keras(model_file, data)
+    elif model_file.endswith('.pb'):
+        predictions = predict_tf(model_file, data)
+    else:
+        print('Unknown model type!')
+        sys.exit(1)
 
     errors = labels != predictions
 
     df = pd.DataFrame(
-        index=['Total'] + [chr(ord('A') + i) for i in range(10)],
+        index=['Total'] + [A(i) for i in range(10)],
         columns=['Errors', 'Total', 'Accuracy'],
     )
 
@@ -48,9 +58,6 @@ def main(input_file, model_file):
 
     print("Statistics:")
     print(df)
-
-    print("Confusion matrix:")
-    print(confusion_matrix(labels, predictions, labels=[chr(ord('A') + i) for i in range(10)]))
 
     print("Saving wrongly-predicted images.")
 
@@ -70,9 +77,9 @@ def main(input_file, model_file):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Train model on notMNIST dataset.')
-    parser.add_argument('input_file', type=str, help='Input file to train on')
-    parser.add_argument('-m', '--model', type=str, default='model.h5', help='The model to load')
+    parser = argparse.ArgumentParser(description='Show statistics for given dataset')
+    parser.add_argument('input_file', type=str, help='Dataset to show statistics for')
+    parser.add_argument('-m', '--model', type=str, default='model.pb', help='The model to load')
 
     args = parser.parse_args()
     main(args.input_file, args.model)

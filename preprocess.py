@@ -57,14 +57,16 @@ for size in ['small', 'large']:
         ]
 
         # Preallocate memory for the image data
-        letter_data = np.zeros((len(images), 28, 28))
+        letter_data = np.zeros((2 * len(images), 28, 28))
 
         # Load the image data into the numpy array. Some images are broken
         # (0 bytes), and we just skip them. It shouldn't be enough images
         # to bias the learning algorithms.
         for j, image in enumerate(images):
             try:
-                letter_data[j, :, :] = imread(image)
+                im = imread(image)
+                letter_data[2 * j, :, :] = im
+                letter_data[2 * j + 1, :, :] = 255 - im
             except OSError:
                 print("Skipping loading of %s." % image)
 
@@ -74,7 +76,9 @@ for size in ['small', 'large']:
 
         data = np.append(data, letter_data, axis=0)
 
-        filenames = np.append(filenames, [i.split('/')[-1] for i in images])
+        fnames = [i.split('/')[-1] for i in images]
+
+        filenames = np.append(filenames, list(zip(fnames, [f.split('.')[0] + '_inv.png' for f in fnames])))
 
     print('Found %s records for notMNIST_%s dataset. Saving...' % (data.shape[0], size))
 

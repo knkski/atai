@@ -2,6 +2,7 @@ notMNIST_*.tar.gz
 notMNIST_*/
 *.npz
 *.h5
+*.pb
 logs/
 .idea/
 errors/

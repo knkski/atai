@@ -1,24 +1,19 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+[dev-packages]
+jupyter = "*"
+jupyter_contrib_nbextensions = "*"
 
 [packages]
-
 tensorflow = "*"
 scikit-learn = "*"
-keras = "*"
-pillow = "*"
-"h5py" = "*"
+h5py = "*"
 graphviz = "*"
 pydot = "*"
 matplotlib = "*"
 floyd-cli = "*"
 pandas = "*"
-
-
-[dev-packages]
-
-jupyter = "*"
-jupyter-contrib-nbextensions = "*"
+Keras = "*"
+Pillow = "*"
