@@ -84,10 +84,11 @@ def predict(model_filename, filenames):
         print("%s: %s" % (filename, prediction))
 
 
-# For use in final submission
+# For use in final submission. Takes in a single image in the form of a 28x28 numpy array, and
+# returns a prediction in the range 0-9
 def classify(image):
     image = image.reshape((1, 28, 28, 1))
-    return predict_tf('model.pb', image)
+    return predict_tf('model.pb', image)[0]
 
 
 if __name__ == '__main__':
